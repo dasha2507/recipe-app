@@ -10,13 +10,13 @@ export function setupModal() {
   }
 
   closeBtn.addEventListener('click', closeModal);
-  modal.addEventListener('click', (e) => {
+  modal.addEventListener('click', (e: MouseEvent) => {
     if (e.target === modal) {
       closeModal();
     }
   });
 
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'Escape' && modal.classList.contains('active')) {
       closeModal();
     }
