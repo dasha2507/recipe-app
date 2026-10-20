@@ -6,13 +6,46 @@ import type { Recipe } from './types/recipe';
 
 let allRecipes: Recipe[] = [];
 
+function setupTheme() {
+  const themeBtn = document.createElement('button');
+  themeBtn.id = 'theme-toggle';
+  themeBtn.className = 'theme-btn-fixed';
+  themeBtn.setAttribute('aria-label', 'Переключити тему');
+
+  const savedTheme = localStorage.getItem('theme');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    themeBtn.textContent = '☀️ Світла тема';
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    themeBtn.textContent = '🌙 Темна тема';
+  }
+
+  themeBtn.addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    if (currentTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+      themeBtn.textContent = '🌙 Темна тема';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+      themeBtn.textContent = '☀️ Світла тема';
+    }
+  });
+
+  document.body.appendChild(themeBtn);
+}
+
 async function initApp() {
   setupModal();
+  setupTheme();
   
   const searchInput = document.getElementById('search-input') as HTMLInputElement;
   const categorySelect = document.getElementById('category-select') as HTMLSelectElement;
 
-  // Завантаження категорій для фільтра
   try {
     const categories = await fetchCategories();
     categories.forEach(tag => {
@@ -25,10 +58,8 @@ async function initApp() {
     console.error('Не вдалося завантажити категорії', e);
   }
 
-  // Завантаження початкових рецептів
   await loadAndDisplayRecipes('');
 
-  // Пошук з дебаунсом (інтерактивний сценарій №2)
   let searchTimeout: number;
   searchInput.addEventListener('input', () => {
     clearTimeout(searchTimeout);
@@ -38,7 +69,6 @@ async function initApp() {
     }, 300);
   });
 
-  // Фільтрація за категорією (інтерактивний сценарій №3)
   categorySelect.addEventListener('change', async () => {
     const selectedCategory = categorySelect.value;
     const query = searchInput.value;
@@ -72,5 +102,4 @@ async function loadAndDisplayRecipes(query: string = '') {
   }
 }
 
-// Запуск застосунку після завантаження DOM
 document.addEventListener('DOMContentLoaded', initApp);

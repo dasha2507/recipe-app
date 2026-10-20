@@ -43,7 +43,6 @@ export function showError(message: string) {
   statusContainer.innerHTML = `<div class="error-message">❌ ${message}</div>`;
 }
 
-// Ось ця функція обов'язково має бути з ключовим словом export!
 export function clearStatus() {
   const statusContainer = document.getElementById('status-container') as HTMLElement;
   statusContainer.innerHTML = '';

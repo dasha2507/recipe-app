@@ -17,7 +17,6 @@ export async function fetchRecipes(query: string = ''): Promise<Recipe[]> {
   return data.recipes;
 }
 
-// Обов'язково має бути експорт перед цією функцією!
 export async function fetchCategories(): Promise<string[]> {
   const response = await fetch(`${BASE_URL}/tags`);
   if (!response.ok) {

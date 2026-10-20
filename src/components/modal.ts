@@ -23,7 +23,6 @@ export function setupModal() {
   });
 }
 
-// Обов'язково має бути експорт тут!
 export function openRecipeModal(recipe: Recipe) {
   const modal = document.getElementById('recipe-modal') as HTMLElement;
   const modalBody = document.getElementById('modal-body') as HTMLElement;
